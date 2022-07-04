@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import DragAndDrop from "../components/DragAndDrop";
-import Loading from "../components/Loading";
-import Success from "../components/Success";
-import useUploaderUrlState from "../hooks/useUploadState";
-import useUploaderUrlUpdaterContext from "../hooks/useUploadUpdate";
-import uploadImg from "../utils/uploadImg";
+import { useEffect, useMemo, useState } from 'react';
+import DragAndDrop from '../components/DragAndDrop';
+import Loading from '../components/Loading';
+import Success from '../components/Success';
+import useUploaderUrlState from '../hooks/useUploadState';
+import useUploaderUrlUpdaterContext from '../hooks/useUploadUpdate';
+import uploadImg from '../utils/uploadImg';
 
 function Uploader() {
   const [loading, setLoading] = useState(false);
@@ -30,15 +30,14 @@ function Uploader() {
     }
   }, [image]);
   useEffect(() => {
-    if (url === "loading") {
+    if (url === 'loading') {
       setLoading(true);
       setUpload(false);
-    } else if (url !== "loading" && url !== null) {
+    } else if (url !== 'loading' && url !== null) {
       const img = new Image();
       img.src = url.publicUrl;
       img.onload = () => {
         setImgSrc(url.publicUrl);
-        console.log(url.publicUrl);
       };
     } else {
       setUpload(false);
@@ -49,19 +48,22 @@ function Uploader() {
     if (url !== null) {
       setLoading(false);
       setUpload(true);
-      console.log("change");
     }
   }, [imgSrc]);
-  return (
-    <>
-      {loading ? (
-        <Loading />
-      ) : upload ? (
-        <Success src={imgSrc} />
-      ) : (
-        <DragAndDrop uploadImage={setImage} />
-      )}
-    </>
-  );
+
+  return useMemo(() => {
+    return (
+      // eslint-disable-next-line react/jsx-no-useless-fragment
+      <>
+        {loading ? (
+          <Loading />
+        ) : upload ? (
+          <Success src={imgSrc} />
+        ) : (
+          <DragAndDrop uploadImage={setImage} />
+        )}
+      </>
+    );
+  }, [loading, upload]);
 }
 export default Uploader;

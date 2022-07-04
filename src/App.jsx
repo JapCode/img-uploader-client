@@ -1,6 +1,6 @@
-import Uploader from "./container/Uploader";
-import { UploaderUrlProvider } from "./context/Upload";
-import "./index.css";
+import Uploader from './container/Uploader';
+import { UploaderUrlProvider } from './context/Upload';
+import './index.css';
 
 function App() {
   return (
